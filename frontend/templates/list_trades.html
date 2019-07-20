@@ -14,20 +14,22 @@
       <th scope="col">#</th>
       <th scope="col">trade no.</th>
       <th scope="col">typology</th>
+      <th scope="col">nominal</th>
         <th scope="col">price</th>
     </tr>
   </thead>
     <tbody>
-{% for trade_no, data in trades.items() %}
-    <tr class="{{ trade_no }}">
+{% for trade in trades %}
+    <tr class="{{ trade.number }}">
       <th scope="row">{{ loop.index }}</th>
-        <td>{{ trade_no }}</td>
-        <td>{{ data.typology }}</td>
-        <td class="price">{{ data.price }}</td>
+        <td>{{ trade.number }}</td>
+        <td>{{ trade.typology }}</td>
+        <td>{{ trade.nominal }}</td>
+        <td class="price"><i class="fa-2x fas fa-sun fa-spin"></i></td>
     </tr>
 {% endfor %}
   </tbody>
 </table>
-  <button onclick="send()">send message</button>
+
     </div>
 {% endblock%}

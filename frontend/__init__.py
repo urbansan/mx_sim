@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template
 import os
+from .. import connectivity
 
-websocket_address = os.environ['WEBSOCKET_HOST'] + ':8765'
+
+host = os.environ['WEBSOCKET_HOST']
+port = os.environ['WEBSOCKET_PORT']
+websocket_address =  f'{host}:{port}'
 
 
 
@@ -17,8 +21,9 @@ def home():
 
 @frontend_app.route('/trade_list')
 def list_trades():
-    trades = {'13413134': {'typology': 'spot', 'price': 400},
-              '92314124': {'typology': 'outright', 'price': 3000}}
+    trades = connectivity.get_trades_for('uci', 'live')
+    pricing_id = connectivity.price_batch_of_trades(trades)
     return render_template('list_trades.html',
                            trades=trades,
-                           websocket_address=websocket_address)
+                           websocket_address=websocket_address,
+                           uuid=pricing_id)
