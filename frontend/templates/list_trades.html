@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">trade no.</th>
+      <th scope="col">typology</th>
+        <th scope="col">price</th>
+    </tr>
+  </thead>
+    <tbody>
+{% for trade_no, data in trades.items() %}
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+        <td>{{ trade_no }}</td>
+        <td>{{ data.typology }}</td>
+        <td>{{ data.price }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+    </div>
+{% endblock%}
