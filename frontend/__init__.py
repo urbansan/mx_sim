@@ -1,4 +1,9 @@
 from flask import Blueprint, render_template
+import os
+
+websocket_address = os.environ['WEBSOCKET_HOST'] + ':8765'
+
+
 
 
 frontend_app = Blueprint('frontend', __name__,
@@ -14,4 +19,6 @@ def home():
 def list_trades():
     trades = {'13413134': {'typology': 'spot', 'price': 400},
               '92314124': {'typology': 'outright', 'price': 3000}}
-    return render_template('list_trades.html', trades=trades)
+    return render_template('list_trades.html',
+                           trades=trades,
+                           websocket_address=websocket_address)

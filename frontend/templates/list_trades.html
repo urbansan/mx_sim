@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% block scripts %}
+{% include 'scripts/websocket_update.js' %}
+
+{% endblock %}
+
 {% block content %}
 <div class="container">
 
@@ -14,14 +19,15 @@
   </thead>
     <tbody>
 {% for trade_no, data in trades.items() %}
-    <tr>
+    <tr class="{{ trade_no }}">
       <th scope="row">{{ loop.index }}</th>
         <td>{{ trade_no }}</td>
         <td>{{ data.typology }}</td>
-        <td>{{ data.price }}</td>
+        <td class="price">{{ data.price }}</td>
     </tr>
 {% endfor %}
   </tbody>
 </table>
+  <button onclick="send()">send message</button>
     </div>
 {% endblock%}
