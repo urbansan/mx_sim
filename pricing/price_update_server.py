@@ -4,7 +4,7 @@ import random
 import json
 import os
 from dotenv import load_dotenv
-from ..connectivity import get_trades_by_pricing_id
+from .. import connectivity
 
 
 dirname = os.path.dirname(__file__)
@@ -12,33 +12,38 @@ dotenv_path = os.path.join(dirname, '..', '.flaskenv')
 load_dotenv(dotenv_path=dotenv_path)
 
 
-async def new_conn(ws, path):
+async def new_connection(ws, path):
     print('>> log >>', ws, path)
     pricing_id = path.strip('/')
-    trades = get_trades_by_pricing_id(pricing_id)
 
-    while True:
-        await asyncio.sleep(1)
-        trade = random.choice(trades).decode("utf-8")
-        print(trade)
-        price_update = {'trade_no': trade, 'price': random.randint(100, 1000)}
-        to_json = json.dumps(price_update)
-        try:
-            hadouken = await ws.send(to_json)
-            print(hadouken)
-        except websockets.exceptions.ConnectionClosedOK:
-            pass  #TODO: possible cleanup
 
-def hadouken():
+    # while True:
+    room_listener = connectivity.get_pricing_room_listener(pricing_id)
+    for message in room_listener.listen():
+        if message['type'] == 'message':
+            print(message)
+            if message['data'] == 'FINISHED':
+                # await ws.close()
+                break
+                # raise websockets.exceptions.ConnectionClosedOK(1001, 'pricing finished')
+
+            try:
+                await ws.send(message['data'])
+            except websockets.exceptions.ConnectionClosedOK:
+                pass  #TODO: possible cleanup
+    print('end y\'all')
+
+
+def run_server():
     print('Starting pricing server...')
 
     host = os.environ['WEBSOCKET_HOST']
     port = os.environ['WEBSOCKET_PORT']
-    global new_conn
-    server = websockets.serve(new_conn, host, port)
+    global new_connection
+    server = websockets.serve(new_connection, host, port)
 
     asyncio.get_event_loop().run_until_complete(server)
     asyncio.get_event_loop().run_forever()
 
 if __name__ == '__main__':
-    hadouken()
+    run_server()

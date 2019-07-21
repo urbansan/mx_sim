@@ -1,6 +1,6 @@
 import redis
-from ..common.enums import Databases
-from ..common.trade import Trade
+from mx_sim.common.enums import Databases
+from mx_sim.common.trade import Trade
 
 print(Databases.TRADES.value)
 redis_conn = redis.Redis(db=Databases.TRADES.value)
@@ -14,6 +14,8 @@ trade_list = [
     Trade('xccy', 123, 14500),
     Trade('cf piecewise', 999, 100),
 ]
+
+redis_conn.delete('uci:live')
 
 for trade in trade_list:
     redis_conn.hset('uci:live', str(trade.number), trade.serialize())

@@ -8,8 +8,6 @@ port = os.environ['WEBSOCKET_PORT']
 websocket_address =  f'{host}:{port}'
 
 
-
-
 frontend_app = Blueprint('frontend', __name__,
                          template_folder='templates')
 
