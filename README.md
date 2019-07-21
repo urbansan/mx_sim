@@ -10,7 +10,7 @@ Add this repo to PYTHONPATH:
 
 Run async websocket price update server:
 
-`~$: python -m mx_sim.pricing.price_update_server`
+`~$: python -m mx_sim.pricing.async_server`
 
 Run Celery workers:
 
