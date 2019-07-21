@@ -45,3 +45,11 @@ def get_pricing_room_publish_function(pricing_id):
     from functools import partial
     publish = partial(r.publish, channel=pricing_id)
     return publish
+
+
+def continue_pricing(pricing_id, trades):
+    r = redis.Redis(db=Databases.PRICING.value, **redis_default_options)
+    r.delete(pricing_id)
+    trade_numbers = [trade.number for trade in trades]
+    r.lpush(pricing_id, *trade_numbers)
+    async_tasks.price_by_pricing_id.delay(pricing_id)

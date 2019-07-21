@@ -23,7 +23,7 @@ def price_by_pricing_id(pricing_id):
     random.shuffle(trades)
     time.sleep(2)
     tasks = []
-    price_count = 5000
+    price_count = 10
     for _ in range(price_count):
         for trade in trades:
             result = send_single_price.delay(trade, pricing_id)
